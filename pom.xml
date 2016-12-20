@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.lukweb</groupId>
-    <artifactId>twitch-chat</artifactId>
+    <artifactId>TwitchChat</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <name>TwitchChat</name>
     <description>A simple IRC client for Twitch</description>
-    <url>https://github.com/lukweb-de/twitch-chat</url>
+    <url>https://github.com/lukweb-de/TwitchChat</url>
     <packaging>jar</packaging>
 
     <licenses>
@@ -22,14 +22,14 @@
     </licenses>
 
     <issueManagement>
-        <url>https://github.com/lukweb-de/twitch-chat/issues</url>
+        <url>https://github.com/lukweb-de/TwitchChat/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/lukweb-de/twitch-chat</url>
-        <connection>scm:git:git://github.com/lukweb-de/twitch-chat.git</connection>
-        <developerConnection>scm:git:git@github.com:lukweb-de/twitch-chat.git</developerConnection>
+        <url>https://github.com/lukweb-de/TwitchChat</url>
+        <connection>scm:git:git://github.com/lukweb-de/TwitchChat.git</connection>
+        <developerConnection>scm:git:git@github.com:lukweb-de/TwitchChat.git</developerConnection>
     </scm>
 
     <developers>
