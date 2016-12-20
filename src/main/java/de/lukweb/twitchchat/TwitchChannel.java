@@ -1,13 +1,14 @@
 package de.lukweb.twitchchat;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TwitchChannel {
 
     private String name;
     private TwitchChat chat;
-    private List<String> operators = new ArrayList<>();
+    // Attributes: https://github.com/justintv/Twitch-API/blob/master/IRC.md#roomstate-1
+    private String language;
+    private boolean uniqueMessages; // Messages with more than 9 characters must be unique
+    private boolean subsOnly;
+    private boolean slowMode;
 
     private String messagePrefix;
 
