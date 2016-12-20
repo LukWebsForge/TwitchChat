@@ -38,16 +38,7 @@ public class TwitchChat {
         irc.sendString("NICK " + username);
         irc.sendString("CAP REQ :twitch.tv/membership");
         irc.sendString("CAP REQ :twitch.tv/commands");
-        // irc.sendString("CAP REQ :twitch.tv/tags");
-        getChannel("gurkengewuerz").sendMessage("Guten Tag");
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            getChannel("gurkengewuerz").sendWhisper("lukbukkit", "Hallo!");
-        }).start();
+        irc.sendString("CAP REQ :twitch.tv/tags");
     }
 
     /**
@@ -71,7 +62,7 @@ public class TwitchChat {
     }
 
     void leaveChannel(TwitchChannel channel) {
-        irc.sendString("PART #" + channel);
+        irc.sendString("PART #" + channel.getName());
         channels.remove(channel.getName());
     }
 
