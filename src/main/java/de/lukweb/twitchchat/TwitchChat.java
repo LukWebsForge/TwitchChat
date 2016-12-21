@@ -1,10 +1,14 @@
 package de.lukweb.twitchchat;
 
+import de.lukweb.twitchchat.events.EventManager;
+import de.lukweb.twitchchat.events.irc.IrcReceiveMessageEvent;
 import de.lukweb.twitchchat.irc.IrcClient;
+import de.lukweb.twitchchat.irc.MessageDelayer;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 public class TwitchChat {
 
@@ -12,6 +16,8 @@ public class TwitchChat {
     private String oauthkey;
 
     private IrcClient irc;
+    private EventManager eventManager;
+    private MessageDelayer messageDelayer;
     private HashMap<String, TwitchChannel> channels = new HashMap<>();
 
     /**
@@ -24,6 +30,7 @@ public class TwitchChat {
     public TwitchChat(String username, String oauthkey) {
         this.username = username.toLowerCase();
         this.oauthkey = oauthkey.startsWith("oauth:") ? oauthkey : "oauth:" + oauthkey;
+        this.eventManager = new EventManager();
         connect();
     }
 
@@ -34,11 +41,23 @@ public class TwitchChat {
             e.printStackTrace();
             return;
         }
+        this.messageDelayer = new MessageDelayer(this, irc);
+        irc.setInputCallback(getInputHandler());
         irc.sendString("PASS " + oauthkey);
         irc.sendString("NICK " + username);
         irc.sendString("CAP REQ :twitch.tv/membership");
         irc.sendString("CAP REQ :twitch.tv/commands");
         irc.sendString("CAP REQ :twitch.tv/tags");
+    }
+
+    private Consumer<String> getInputHandler() {
+        return msg -> {
+            IrcReceiveMessageEvent event = new IrcReceiveMessageEvent(msg);
+            eventManager.callEvent(event);
+            if (event.isCanceled()) return;
+
+            // todo add command handlers
+        };
     }
 
     /**
@@ -75,8 +94,24 @@ public class TwitchChat {
         return username;
     }
 
-    IrcClient getIrc() {
-        return irc;
+    /**
+     * Gets the event manager for registering, unregistering and calling events.
+     *
+     * @return the event manager
+     */
+    public EventManager getEventManager() {
+        return eventManager;
+    }
+
+    /**
+     * Sends a raw message to the IRC. The message will be delayed if the
+     * <a href="https://www.youtube.com/watch?v=0rNpHKSjIdQ">rate limit</a> was hit.
+     *
+     * @param message  the message to be sent
+     * @param operator whether the twitch client is a operator in this channel
+     */
+    public void sendRawMessage(String message, boolean operator) {
+        messageDelayer.queue(message, operator);
     }
 
     /**

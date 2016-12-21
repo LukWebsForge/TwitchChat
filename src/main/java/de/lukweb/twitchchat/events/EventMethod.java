@@ -29,6 +29,7 @@ public class EventMethod implements Comparable {
 
     public void call(Event event) {
         try {
+            method.setAccessible(true);
             method.invoke(classInstance, event);
         } catch (Exception e) {
             // We catch all exceptions, because we want to prevent exceptions from breaking out of the listener
@@ -70,7 +71,7 @@ public class EventMethod implements Comparable {
     public static boolean is(Method method) {
         if (!method.isAnnotationPresent(annotation)) return false;
         if (method.getParameters().length != 1) return false;
-        if (!method.getParameters()[0].getType().isAssignableFrom(Event.class)) return false;
+        if (!Event.class.isAssignableFrom(method.getParameters()[0].getType())) return false;
         return true;
     }
 }

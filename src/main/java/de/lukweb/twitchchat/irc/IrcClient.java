@@ -15,6 +15,7 @@ import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,7 +54,7 @@ public class IrcClient {
     private Socket socket;
     private BufferedReader in;
     private DataOutputStream out;
-    private Thread readThread;
+    private Consumer<String> inputCallback;
 
     private boolean close;
 
@@ -84,23 +85,25 @@ public class IrcClient {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new DataOutputStream(socket.getOutputStream());
 
-        readThread = new Thread(() -> {
+        new Thread(() -> {
             while (!close) {
                 try {
                     String line = in.readLine();
                     if (line == null) continue;
-                    System.out.println("> " + line);
+                    inputCallback.accept(line);
                 } catch (IOException e) {
                     catchException(e);
                 }
             }
-        });
-        readThread.start();
+        }).start();
+    }
+
+    public void setInputCallback(Consumer<String> inputCallback) {
+        this.inputCallback = inputCallback;
     }
 
     public void sendString(String message) {
         try {
-            System.out.println("< " + message);
             out.write((message + "\n").getBytes());
             out.flush();
         } catch (IOException ex) {
@@ -111,6 +114,10 @@ public class IrcClient {
     public boolean isConnected() {
         if (close) return false;
         return socket.isConnected();
+    }
+
+    public boolean isClosed() {
+        return close;
     }
 
     public void close() {

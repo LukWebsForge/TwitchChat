@@ -28,7 +28,7 @@ public class EventManager {
 
     public void callEvent(Event event) {
         eventMethods.stream()
-                .filter(m -> m.getEvent().isAssignableFrom(event.getClass()))
+                .filter(m -> event.getClass().isAssignableFrom(m.getEvent()))
                 .sorted()
                 .forEachOrdered(m -> m.call(event));
     }
