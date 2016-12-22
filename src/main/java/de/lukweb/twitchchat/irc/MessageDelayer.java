@@ -58,7 +58,6 @@ public class MessageDelayer {
         if (event.isCanceled()) return;
 
         irc.sendString(message.getMessage());
-        System.out.println("< " + message.getMessage());
         message.setSend();
     }
 

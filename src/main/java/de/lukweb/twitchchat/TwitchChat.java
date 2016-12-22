@@ -1,14 +1,13 @@
 package de.lukweb.twitchchat;
 
 import de.lukweb.twitchchat.events.EventManager;
-import de.lukweb.twitchchat.events.irc.IrcReceiveMessageEvent;
 import de.lukweb.twitchchat.irc.IrcClient;
 import de.lukweb.twitchchat.irc.MessageDelayer;
+import de.lukweb.twitchchat.twitch.TwitchInputHandler;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
-import java.util.function.Consumer;
 
 public class TwitchChat {
 
@@ -22,7 +21,8 @@ public class TwitchChat {
 
     /**
      * Initalizes and starts the TwitchChatClient. To get an OAuth Password visit
-     * <a href="https://twitchapps.com/tmi/">this</a> side.
+     * <a href="https://twitchapps.com/tmi/">this</a> side. Call the method {@link TwitchChat#connect()} to open a
+     * connection to the Twitch IRC.
      *
      * @param username The account's twitch username
      * @param oauthkey The OAuth Password of the account
@@ -31,10 +31,13 @@ public class TwitchChat {
         this.username = username.toLowerCase();
         this.oauthkey = oauthkey.startsWith("oauth:") ? oauthkey : "oauth:" + oauthkey;
         this.eventManager = new EventManager();
-        connect();
     }
 
-    private void connect() {
+    /**
+     * (Re-)Connects the chat instance with the Twitch IRC.
+     * WARNING: Messages in cache may be purged.
+     */
+    public void connect() {
         try {
             irc = new IrcClient("irc.chat.twitch.tv", 443, true);
         } catch (IOException | GeneralSecurityException e) {
@@ -42,22 +45,21 @@ public class TwitchChat {
             return;
         }
         this.messageDelayer = new MessageDelayer(this, irc);
-        irc.setInputCallback(getInputHandler());
-        irc.sendString("PASS " + oauthkey);
-        irc.sendString("NICK " + username);
-        irc.sendString("CAP REQ :twitch.tv/membership");
-        irc.sendString("CAP REQ :twitch.tv/commands");
-        irc.sendString("CAP REQ :twitch.tv/tags");
+        irc.setInputHandler(new TwitchInputHandler(this));
+        sendRawMessage("PASS " + oauthkey);
+        sendRawMessage("NICK " + username);
+        sendRawMessage("CAP REQ :twitch.tv/membership");
+        sendRawMessage("CAP REQ :twitch.tv/commands");
+        sendRawMessage("CAP REQ :twitch.tv/tags");
     }
 
-    private Consumer<String> getInputHandler() {
-        return msg -> {
-            IrcReceiveMessageEvent event = new IrcReceiveMessageEvent(msg);
-            eventManager.callEvent(event);
-            if (event.isCanceled()) return;
-
-            // todo add command handlers
-        };
+    /**
+     * Returns whether the client is connected to the Twitch server.
+     *
+     * @return whether connected to the Twitch server
+     */
+    public boolean isConnected() {
+        return irc != null && irc.isConnected();
     }
 
     /**
@@ -68,20 +70,21 @@ public class TwitchChat {
      * @return a Twitch channel
      */
     public TwitchChannel getChannel(String channel) {
+        if (!isConnected()) throw new IllegalStateException("The client isn't connected!");
         channel = channel.toLowerCase();
         if (channels.containsKey(channel)) return channels.get(channel);
         return joinChannel(channel);
     }
 
     private TwitchChannel joinChannel(String channel) {
-        irc.sendString("JOIN #" + channel);
+        sendRawMessage("JOIN #" + channel);
         TwitchChannel twitchChannel = new TwitchChannel(channel, this);
         channels.put(channel, twitchChannel);
         return twitchChannel;
     }
 
     void leaveChannel(TwitchChannel channel) {
-        irc.sendString("PART #" + channel.getName());
+        sendRawMessage("PART #" + channel.getName());
         channels.remove(channel.getName());
     }
 
@@ -103,6 +106,17 @@ public class TwitchChat {
         return eventManager;
     }
 
+
+    /**
+     * Sends a raw message to the IRC. The message will be delayed if the
+     * <a href="https://www.youtube.com/watch?v=0rNpHKSjIdQ">rate limit</a> was hit.
+     *
+     * @param message the message to be sent
+     */
+    public void sendRawMessage(String message) {
+        messageDelayer.queue(message, false);
+    }
+
     /**
      * Sends a raw message to the IRC. The message will be delayed if the
      * <a href="https://www.youtube.com/watch?v=0rNpHKSjIdQ">rate limit</a> was hit.
@@ -111,11 +125,12 @@ public class TwitchChat {
      * @param operator whether the twitch client is a operator in this channel
      */
     public void sendRawMessage(String message, boolean operator) {
+        if (!isConnected()) throw new IllegalStateException("The client isn't connected!");
         messageDelayer.queue(message, operator);
     }
 
     /**
-     * Closes the connection to all channels and the irc
+     * Closes the connection to all channels and the irc. Use the method {@link TwitchChat#connect()} to connect again.
      */
     public void close() {
         for (TwitchChannel channel : channels.values()) {
