@@ -11,7 +11,6 @@ public class JoinC extends Command {
         super("JOIN");
     }
 
-
     @Override
     public void handle(String channel, Map<String, String> tags, String[] arguments, TwitchChat chat) {
 

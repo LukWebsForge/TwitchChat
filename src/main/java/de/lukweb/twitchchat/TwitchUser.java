@@ -3,36 +3,68 @@ package de.lukweb.twitchchat;
 /**
  * A TwitchUser is specific for every {@link TwitchChannel}.
  */
-public class TwitchUser {
+public interface TwitchUser {
 
-    private String name;
-    private TwitchChannel channel;
+    /**
+     * Gets the name (lowercase) of the twitch user.
+     *
+     * @return name of the twitch user
+     */
+    String getName();
 
-    private boolean staff; // global twitch mods
-    private boolean turbo;
-    private boolean broadcaster;
-    private boolean mod;
-    private boolean subscriber;
+    /**
+     * Gets the display name shown to other twitch users of the twitch user.
+     *
+     * @return name shown to other twitch users
+     */
+    String getDisplayName();
 
-    private int color;
-    private String displayName;
+    /**
+     * Gets the channel of the user.
+     *
+     * @return channel of the user
+     */
+    TwitchChannel getChannel();
 
-    public TwitchUser(String name) {
-        this.name = name;
-    }
+    /**
+     * Gets whether this user is a global mod.
+     *
+     * @return Ob dieser Benutzer ein globaler Mod ist
+     */
+    boolean isStaff();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    /**
+     * Gets whether this user owns a twitch turbo subscription.
+     *
+     * @return whether this user owns a twitch turbo subscription
+     */
+    boolean isTurbo();
 
-        TwitchUser that = (TwitchUser) o;
+    /**
+     * Gets whether this user is the brodcaster.
+     *
+     * @return whether this user is the brodcaster
+     */
+    boolean isBroadcaster();
 
-        return name.equals(that.name);
-    }
+    /**
+     * Gets whether this user has mod rights in this channel.
+     *
+     * @return whether this user has mod rights in this channel
+     */
+    boolean isMod();
 
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
+    /**
+     * Gets whether this user has subscribed this channel.
+     *
+     * @return whether this user has subscribed this channel
+     */
+    boolean isSubscriber();
+
+    /**
+     * Gets the color used for displaying the name in the chat.
+     *
+     * @return color used for displaying the name
+     */
+    int getColor();
 }
