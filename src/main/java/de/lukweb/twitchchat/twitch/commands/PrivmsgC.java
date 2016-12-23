@@ -1,7 +1,7 @@
 package de.lukweb.twitchchat.twitch.commands;
 
-import de.lukweb.twitchchat.TwitchChat;
 import de.lukweb.twitchchat.twitch.Command;
+import de.lukweb.twitchchat.twitch.TurboChat;
 
 import java.util.Map;
 
@@ -12,7 +12,7 @@ public class PrivmsgC extends Command {
     }
 
     @Override
-    public void handle(String channel, Map<String, String> tags, String[] arguments, TwitchChat chat) {
+    public void handle(String sender, Map<String, String> tags, String[] arguments, TurboChat chat) {
 
     }
 }

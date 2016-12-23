@@ -1,7 +1,5 @@
 package de.lukweb.twitchchat.twitch;
 
-import de.lukweb.twitchchat.TwitchChat;
-
 import java.util.Map;
 
 public abstract class Command {
@@ -16,5 +14,9 @@ public abstract class Command {
         return name;
     }
 
-    public abstract void handle(String channel, Map<String, String> tags, String[] arguments, TwitchChat chat);
+    public abstract void handle(String sender, Map<String, String> tags, String[] arguments, TurboChat chat);
+
+    protected String getUsernameBySender(String username) {
+        return username.split("[!]")[0].substring(1);
+    }
 }

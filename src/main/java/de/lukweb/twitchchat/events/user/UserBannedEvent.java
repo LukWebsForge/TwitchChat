@@ -4,7 +4,14 @@ import de.lukweb.twitchchat.TwitchUser;
 
 public class UserBannedEvent extends UserEvent {
 
-    public UserBannedEvent(TwitchUser user) {
+    private String reason;
+
+    public UserBannedEvent(TwitchUser user, String reason) {
         super(user);
+        this.reason = reason;
+    }
+
+    public String getReason() {
+        return reason;
     }
 }

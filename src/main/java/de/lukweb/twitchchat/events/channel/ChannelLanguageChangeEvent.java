@@ -4,7 +4,14 @@ import de.lukweb.twitchchat.TwitchChannel;
 
 public class ChannelLanguageChangeEvent extends ChannelEvent {
 
-    public ChannelLanguageChangeEvent(TwitchChannel channel) {
+    private String oldLanguage;
+
+    public ChannelLanguageChangeEvent(TwitchChannel channel, String oldLanguage) {
         super(channel);
+        this.oldLanguage = oldLanguage;
+    }
+
+    public String getOldLanguage() {
+        return oldLanguage;
     }
 }

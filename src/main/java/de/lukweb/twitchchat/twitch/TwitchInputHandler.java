@@ -1,8 +1,8 @@
 package de.lukweb.twitchchat.twitch;
 
-import de.lukweb.twitchchat.TwitchChat;
 import de.lukweb.twitchchat.events.irc.IrcReceiveMessageEvent;
 import de.lukweb.twitchchat.irc.IrcInputHandler;
+import de.lukweb.twitchchat.twitch.commands.CapC;
 import de.lukweb.twitchchat.twitch.commands.ClearchatC;
 import de.lukweb.twitchchat.twitch.commands.GlobaluserstateC;
 import de.lukweb.twitchchat.twitch.commands.HosttargetC;
@@ -23,10 +23,10 @@ import java.util.Map;
 
 public class TwitchInputHandler implements IrcInputHandler {
 
-    private TwitchChat chat;
+    private TurboChat chat;
     private Map<String, Command> commands;
 
-    public TwitchInputHandler(TwitchChat chat) {
+    public TwitchInputHandler(TurboChat chat) {
         this.chat = chat;
         commands = new HashMap<>();
         registerCommands();
@@ -34,6 +34,7 @@ public class TwitchInputHandler implements IrcInputHandler {
 
     private void registerCommands() {
         Command[] commandsArr = new Command[]{
+                new CapC(),
                 new ClearchatC(),
                 new GlobaluserstateC(),
                 new HosttargetC(),
@@ -59,19 +60,19 @@ public class TwitchInputHandler implements IrcInputHandler {
 
         String[] splitted = input.split(" ");
         Map<String, String> tags = new HashMap<>();
-        String channel = "";
+        String sender = "";
 
         if (splitted[0].startsWith("@")) {
             String tagsStr = splitted[0].substring(1);
             for (String s : tagsStr.split("[;]")) {
                 String[] split = s.split("[=]");
-                tags.put(split[0], split.length > 1 ? split[0] : "");
+                tags.put(split[0], split.length > 1 ? split[1].trim() : "");
             }
             splitted = Arrays.copyOfRange(splitted, 1, splitted.length);
         }
 
         if (splitted[0].startsWith(":")) {
-            channel = splitted[0];
+            sender = splitted[0];
             splitted = Arrays.copyOfRange(splitted, 1, splitted.length);
         }
 
@@ -84,12 +85,12 @@ public class TwitchInputHandler implements IrcInputHandler {
         }
 
         if (!commands.containsKey(command.toLowerCase())) {
-            // something is putt (broken) ):
+            // something is broken ):
             System.out.println("unregistered command: " + command);
             return;
         }
 
-        commands.get(command.toLowerCase()).handle(channel, tags, arguments, chat);
+        commands.get(command.toLowerCase()).handle(sender, tags, arguments, chat);
     }
 
     private boolean isInt(String string) {

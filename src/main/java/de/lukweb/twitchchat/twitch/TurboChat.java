@@ -8,8 +8,13 @@ import de.lukweb.twitchchat.irc.MessageDelayer;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+/**
+ * Implementation of {@link TwitchChat}
+ */
 public class TurboChat implements TwitchChat {
 
     private String username;
@@ -18,6 +23,7 @@ public class TurboChat implements TwitchChat {
     private IrcClient irc;
     private EventManager eventManager;
     private MessageDelayer messageDelayer;
+    private List<String> capabilities = new ArrayList<>();
     private HashMap<String, TurboChannel> channels = new HashMap<>();
 
     public TurboChat(String username, String oauthkey) {
@@ -52,6 +58,7 @@ public class TurboChat implements TwitchChat {
     public TurboChannel getChannel(String channel) {
         if (!isConnected()) throw new IllegalStateException("The client isn't connected!");
         channel = channel.toLowerCase();
+        if (channel.startsWith("#")) channel = channel.substring(1);
         if (channels.containsKey(channel)) return channels.get(channel);
         return joinChannel(channel);
     }
@@ -88,6 +95,10 @@ public class TurboChat implements TwitchChat {
     public void sendRawMessage(String message, boolean operator) {
         if (!isConnected()) throw new IllegalStateException("The client isn't connected!");
         messageDelayer.queue(message, operator);
+    }
+
+    public void addCapability(String capability) {
+        capabilities.add(capability);
     }
 
     @Override

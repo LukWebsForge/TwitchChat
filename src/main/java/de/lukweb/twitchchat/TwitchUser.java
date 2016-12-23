@@ -67,4 +67,10 @@ public interface TwitchUser {
      * @return color used for displaying the name
      */
     int getColor();
+
+    boolean isBanned();
+
+    boolean isTimeouted();
+
+    int getTimeoutUntil();
 }
