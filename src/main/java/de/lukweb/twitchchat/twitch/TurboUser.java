@@ -1,6 +1,7 @@
 package de.lukweb.twitchchat.twitch;
 
 import de.lukweb.twitchchat.TwitchChannel;
+import de.lukweb.twitchchat.TwitchRank;
 import de.lukweb.twitchchat.TwitchUser;
 
 /**
@@ -12,6 +13,7 @@ public class TurboUser implements TwitchUser {
     private int userid;
     private TwitchChannel channel;
 
+    private TwitchRank rank;
     private boolean staff; // global twitch mod
     private boolean turbo;
     private boolean broadcaster;
@@ -24,9 +26,19 @@ public class TurboUser implements TwitchUser {
 
     private int color;
     private String displayName;
+    private int donatedBits;
 
     public TurboUser(String name) {
         this.name = name;
+    }
+
+    @Override
+    public int getUserId() {
+        return 0;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 
     @Override
@@ -40,8 +52,12 @@ public class TurboUser implements TwitchUser {
     }
 
     @Override
-    public boolean isStaff() {
-        return staff;
+    public TwitchRank getRank() {
+        return rank;
+    }
+
+    public void setRank(TwitchRank rank) {
+        this.rank = rank;
     }
 
     @Override
@@ -56,7 +72,7 @@ public class TurboUser implements TwitchUser {
 
     @Override
     public boolean isMod() {
-        return mod;
+        return rank == TwitchRank.CHANNEL_MOD;
     }
 
     @Override
@@ -99,6 +115,15 @@ public class TurboUser implements TwitchUser {
 
     public void setTimeouted(int duration) {
         timeouted = (int) ((System.currentTimeMillis() / 1000) + duration);
+    }
+
+    @Override
+    public int getDonatedBitAmount() {
+        return donatedBits;
+    }
+
+    public void setDonatedBits(int donatedBits) {
+        this.donatedBits = donatedBits;
     }
 
     @Override

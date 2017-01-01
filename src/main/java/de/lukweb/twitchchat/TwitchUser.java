@@ -6,6 +6,13 @@ package de.lukweb.twitchchat;
 public interface TwitchUser {
 
     /**
+     * Gets the id of the user
+     *
+     * @return thie id of the user
+     */
+    int getUserId();
+
+    /**
      * Gets the name (lowercase) of the twitch user.
      *
      * @return name of the twitch user
@@ -27,11 +34,11 @@ public interface TwitchUser {
     TwitchChannel getChannel();
 
     /**
-     * Gets whether this user is a global mod.
+     * Gets the rank of a user
      *
-     * @return Ob dieser Benutzer ein globaler Mod ist
+     * @return the rank of a user
      */
-    boolean isStaff();
+    TwitchRank getRank();
 
     /**
      * Gets whether this user owns a twitch turbo subscription.
@@ -73,4 +80,6 @@ public interface TwitchUser {
     boolean isTimeouted();
 
     int getTimeoutUntil();
+
+    int getDonatedBitAmount();
 }

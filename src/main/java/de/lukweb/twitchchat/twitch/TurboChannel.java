@@ -16,6 +16,7 @@ public class TurboChannel implements TwitchChannel {
     private String name;
     private TurboChat chat;
     private List<TurboUser> chatters;
+
     // Attributes: https://github.com/justintv/Twitch-API/blob/master/IRC.md#roomstate-1
     private String language;
     private boolean uniqueMessages; // Messages with more than 9 characters must be unique
@@ -36,6 +37,15 @@ public class TurboChannel implements TwitchChannel {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public int getRoomId() {
+        return roomid;
+    }
+
+    public void setRoomid(int roomid) {
+        this.roomid = roomid;
     }
 
     @Override

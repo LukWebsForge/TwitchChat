@@ -5,6 +5,7 @@ import de.lukweb.twitchchat.TwitchChat;
 import de.lukweb.twitchchat.events.EventManager;
 import de.lukweb.twitchchat.irc.IrcClient;
 import de.lukweb.twitchchat.irc.MessageDelayer;
+import de.lukweb.twitchchat.irc.TurboIrcClient;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -35,18 +36,22 @@ public class TurboChat implements TwitchChat {
     @Override
     public void connect() {
         try {
-            irc = new IrcClient("irc.chat.twitch.tv", 443, true);
+            irc = new TurboIrcClient("irc.chat.twitch.tv", 443, true);
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
             return;
         }
         this.messageDelayer = new MessageDelayer(this, irc);
         irc.setInputHandler(new TwitchInputHandler(this));
-        sendRawMessage("PASS " + oauthkey);
-        sendRawMessage("NICK " + username);
         sendRawMessage("CAP REQ :twitch.tv/membership");
         sendRawMessage("CAP REQ :twitch.tv/commands");
         sendRawMessage("CAP REQ :twitch.tv/tags");
+        sendRawMessage("PASS " + oauthkey);
+        sendRawMessage("NICK " + username);
+    }
+
+    void connect(IrcClient client) {
+        this.irc = client;
     }
 
     @Override

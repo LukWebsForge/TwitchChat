@@ -5,6 +5,13 @@ import java.util.List;
 public interface TwitchChannel {
 
     /**
+     * Gets the id of the room
+     *
+     * @return the id of the room
+     */
+    int getRoomId();
+
+    /**
      * Gets the name of the channel.
      *
      * @return the name of the channel
