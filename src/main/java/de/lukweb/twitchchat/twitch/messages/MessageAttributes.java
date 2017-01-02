@@ -12,7 +12,6 @@ public class MessageAttributes {
     private String color;
     private String displayName;
     private List<MessageEmote> emotes;
-    private List<Integer> emoteSets;
     private String messageId;
     private boolean mod;
     private boolean subscriber;
@@ -26,7 +25,6 @@ public class MessageAttributes {
 
         badges = new ArrayList<>();
         emotes = new ArrayList<>();
-        emoteSets = new ArrayList<>();
 
         if (tags.containsKey("badges")) {
             for (String badgeString : tags.get("badges").split("[,]")) {
@@ -37,15 +35,9 @@ public class MessageAttributes {
         color = tags.get("color");
         displayName = tags.get("display-name");
 
-        if (tags.containsKey("emotes")) {
+        if (tags.containsKey("emotes") && tags.get("emotes").length() > 0) {
             for (String emoteString : tags.get("emotes").split("/")) {
                 emotes.add(new MessageEmote(emoteString));
-            }
-        }
-
-        if (tags.containsKey("emote-sets")) {
-            for (String emoteSet : tags.get("emote-sets").split("[,]")) {
-                emoteSets.add(Integer.parseInt(emoteSet));
             }
         }
 
@@ -94,10 +86,6 @@ public class MessageAttributes {
         return emotes;
     }
 
-    public List<Integer> getEmoteSets() {
-        return emoteSets;
-    }
-
     public String getMessageId() {
         return messageId;
     }
@@ -110,8 +98,30 @@ public class MessageAttributes {
         return subscriber;
     }
 
+    public int getSubscriberMonths() {
+        if (!isSubscriber()) return -1;
+        for (MessageBadge badge : badges) {
+            if (badge.getName().equalsIgnoreCase("subscriber")) return badge.getValue();
+        }
+        return 0;
+    }
+
     public boolean isTurbo() {
         return turbo;
+    }
+
+    public boolean isPrime() {
+        for (MessageBadge badge : badges) {
+            if (badge.getName().equalsIgnoreCase("premium") && badge.getValue() == 1) return true;
+        }
+        return false;
+    }
+
+    public boolean isBroadcaster() {
+        for (MessageBadge badge : badges) {
+            if (badge.getName().equalsIgnoreCase("broadcaster") && badge.getValue() == 1) return true;
+        }
+        return false;
     }
 
     public int getRoomId() {
@@ -122,12 +132,32 @@ public class MessageAttributes {
         return userId;
     }
 
+    /**
+     * Gets the rank of the message sender
+     *
+     * @return rank of the message sender
+     */
     public TwitchRank getRank() {
         return rank;
     }
 
+    /**
+     * Gets the amount of bits donated with this message
+     *
+     * @return the amount of bits donated with this message
+     */
     public int getBits() {
         return bits;
+    }
+
+    /**
+     * Gets the amount of all bits donated to this channel
+     *
+     * @return the amount of all bits donated to this channel
+     */
+    public int getAllBits() {
+        for (MessageBadge badge : badges) if (badge.getName().equals("bits")) return badge.getValue();
+        return 0;
     }
 }
 

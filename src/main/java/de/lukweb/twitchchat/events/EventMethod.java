@@ -34,7 +34,7 @@ public class EventMethod implements Comparable {
         } catch (Exception e) {
             // We catch all exceptions, because we want to prevent exceptions from breaking out of the listener
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error while calling event: " +
-                    event.getClass().getSimpleName(), e);
+                    event.getClass().getSimpleName(), e.getCause());
         }
     }
 

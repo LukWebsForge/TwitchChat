@@ -48,6 +48,13 @@ public interface TwitchUser {
     boolean isTurbo();
 
     /**
+     * Gets whether this this user owns a twitch prime subscription.
+     *
+     * @return whether this this user owns a twitch prime subscription
+     */
+    boolean isPrime();
+
+    /**
      * Gets whether this user is the brodcaster.
      *
      * @return whether this user is the brodcaster
@@ -73,7 +80,7 @@ public interface TwitchUser {
      *
      * @return color used for displaying the name
      */
-    int getColor();
+    String getColor();
 
     boolean isBanned();
 

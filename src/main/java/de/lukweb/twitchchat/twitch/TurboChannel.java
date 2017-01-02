@@ -72,7 +72,7 @@ public class TurboChannel implements TwitchChannel {
         name = name.toLowerCase();
         TurboUser user = getChatter(name);
         if (user != null) return user;
-        user = new TurboUser(name);
+        user = new TurboUser(name, this);
         chatters.add(user);
         return user;
     }

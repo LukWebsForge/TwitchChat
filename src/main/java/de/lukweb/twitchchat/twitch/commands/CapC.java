@@ -17,8 +17,9 @@ public class CapC extends Command {
         if (arguments.length < 3) return;
         if (!arguments[0].equalsIgnoreCase("*") || !arguments[1].equalsIgnoreCase("ACK")) return;
 
-        chat.addCapability(arguments[2]);
+        String capability = arguments[2].substring(1);
+        chat.addCapability(capability);
 
-        chat.getEventManager().callEvent(new IrcGainCapabilityEvent(arguments[2]));
+        chat.getEventManager().callEvent(new IrcGainCapabilityEvent(capability));
     }
 }

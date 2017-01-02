@@ -3,14 +3,14 @@ package de.lukweb.twitchchat.irc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IrcClientTest implements IrcClient {
+public class TestIrcClient implements IrcClient {
 
     private List<String> inMessageLog;
     private List<String> outMessageLog;
     private IrcInputHandler inputHandler;
     private boolean closed;
 
-    public IrcClientTest() {
+    public TestIrcClient() {
         inMessageLog = new ArrayList<>();
         outMessageLog = new ArrayList<>();
     }

@@ -16,9 +16,9 @@ public class MessageAttributeTest {
 
     @Test
     public void testAttributes() {
-        String tagString = "badges=staff/1,bits/1000;bits=100;color=;display-name=TWITCH_UserNaME;emotes=15:4-6,1-3/" +
-                "21:8-15;id=b34ccfc7-4977-403a-8a94-33c6bac34fb8;mod=0;room-id=1337;subscriber=0;turbo=1;" +
-                "user-id=1337;user-type=staff";
+        String tagString = "badges=staff/1,bits/1000;bits=100;color=#00FF00;display-name=TWITCH_UserNaME;" +
+                "emotes=15:4-6,1-3/21:8-15;id=b34ccfc7-4977-403a-8a94-33c6bac34fb8;mod=0;room-id=1337;" +
+                "subscriber=0;turbo=1;user-id=1337;user-type=staff";
 
         Map<String, String> tagsMap = new HashMap<>();
 
@@ -31,7 +31,7 @@ public class MessageAttributeTest {
 
         assertTrue(attributes.getBadges().contains(new MessageBadge("staff", 1)));
         assertTrue(attributes.getBadges().contains(new MessageBadge("bits", 1000)));
-        assertEquals(attributes.getColor(), "");
+        assertEquals(attributes.getColor(), "#00FF00");
         assertEquals(attributes.getDisplayName(), "TWITCH_UserNaME");
         assertTrue(attributes.getEmotes().contains(new MessageEmote(15, Arrays.asList(
                 new EmoteLocation(4, 6), new EmoteLocation(1, 3)
@@ -46,6 +46,8 @@ public class MessageAttributeTest {
         assertEquals(attributes.isTurbo(), true);
         assertEquals(attributes.getUserId(), 1337);
         assertEquals(attributes.getRank(), TwitchRank.STAFF);
+        assertEquals(attributes.getBits(), 100);
+        assertEquals(attributes.getAllBits(), 1000);
     }
 
 }

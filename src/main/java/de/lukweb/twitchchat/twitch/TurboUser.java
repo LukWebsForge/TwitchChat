@@ -3,6 +3,7 @@ package de.lukweb.twitchchat.twitch;
 import de.lukweb.twitchchat.TwitchChannel;
 import de.lukweb.twitchchat.TwitchRank;
 import de.lukweb.twitchchat.TwitchUser;
+import de.lukweb.twitchchat.twitch.messages.MessageAttributes;
 
 /**
  * Implementation of {@link TwitchUser}
@@ -14,9 +15,9 @@ public class TurboUser implements TwitchUser {
     private TwitchChannel channel;
 
     private TwitchRank rank;
-    private boolean staff; // global twitch mod
-    private boolean turbo;
     private boolean broadcaster;
+    private boolean prime;
+    private boolean turbo;
     private boolean mod;
     private boolean subscriber;
     private boolean operator;
@@ -24,17 +25,18 @@ public class TurboUser implements TwitchUser {
     private boolean banned;
     private int timeouted;
 
-    private int color;
+    private String color;
     private String displayName;
     private int donatedBits;
 
-    public TurboUser(String name) {
+    public TurboUser(String name, TwitchChannel channel) {
         this.name = name;
+        this.channel = channel;
     }
 
     @Override
     public int getUserId() {
-        return 0;
+        return userid;
     }
 
     public void setUserid(int userid) {
@@ -56,13 +58,14 @@ public class TurboUser implements TwitchUser {
         return rank;
     }
 
-    public void setRank(TwitchRank rank) {
-        this.rank = rank;
-    }
-
     @Override
     public boolean isTurbo() {
         return turbo;
+    }
+
+    @Override
+    public boolean isPrime() {
+        return prime;
     }
 
     @Override
@@ -72,7 +75,7 @@ public class TurboUser implements TwitchUser {
 
     @Override
     public boolean isMod() {
-        return rank == TwitchRank.CHANNEL_MOD;
+        return mod;
     }
 
     @Override
@@ -81,7 +84,7 @@ public class TurboUser implements TwitchUser {
     }
 
     @Override
-    public int getColor() {
+    public String getColor() {
         return color;
     }
 
@@ -124,6 +127,21 @@ public class TurboUser implements TwitchUser {
 
     public void setDonatedBits(int donatedBits) {
         this.donatedBits = donatedBits;
+    }
+
+    public void update(MessageAttributes attributes) {
+        if (attributes.getUserId() > 0) userid = attributes.getUserId();
+        if (attributes.getDisplayName() != null) displayName = attributes.getDisplayName();
+
+        rank = attributes.getRank();
+        broadcaster = attributes.isBroadcaster();
+        turbo = attributes.isTurbo();
+        prime = attributes.isPrime();
+        mod = attributes.isMod();
+        subscriber = attributes.isSubscriber();
+
+        color = attributes.getColor();
+        donatedBits = attributes.getAllBits();
     }
 
     @Override
