@@ -22,6 +22,7 @@ public class TurboChannel implements TwitchChannel {
     private boolean uniqueMessages; // Messages with more than 9 characters must be unique
     private boolean subsOnly;
     private int slowMode;
+    private boolean emoteOnly;
 
     private String hosting;
 
@@ -122,6 +123,15 @@ public class TurboChannel implements TwitchChannel {
 
     public void setSlowMode(int slowMode) {
         this.slowMode = slowMode;
+    }
+
+    @Override
+    public boolean isEmoteOnly() {
+        return emoteOnly;
+    }
+
+    public void setEmoteOnly(boolean emoteOnly) {
+        this.emoteOnly = emoteOnly;
     }
 
     @Override

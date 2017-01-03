@@ -56,6 +56,13 @@ public interface TwitchChannel {
     boolean isSlowMode();
 
     /**
+     * Gets whether chatters can only sends emotes.
+     *
+     * @return whether chatters can only sends emotes
+     */
+    boolean isEmoteOnly();
+
+    /**
      * Gets the time users without mod privileges must wait between sending messages.
      *
      * @return the time users must wait between sending messages

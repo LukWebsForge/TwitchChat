@@ -1,8 +1,11 @@
 package de.lukweb.twitchchat.twitch.commands;
 
+import de.lukweb.twitchchat.events.channel.ChannelDataLoadedEvent;
 import de.lukweb.twitchchat.events.channel.ChannelLanguageChangeEvent;
+import de.lukweb.twitchchat.events.channel.DisableEmoteOnlyChatEvent;
 import de.lukweb.twitchchat.events.channel.DisableR9KEvent;
 import de.lukweb.twitchchat.events.channel.DisableSubsOnlyChatEvent;
+import de.lukweb.twitchchat.events.channel.EnableEmoteOnlyChatEvent;
 import de.lukweb.twitchchat.events.channel.EnableR9KEvent;
 import de.lukweb.twitchchat.events.channel.EnableSubsOnlyChatEvent;
 import de.lukweb.twitchchat.events.channel.SlowModeTimeChangeEvent;
@@ -23,7 +26,7 @@ public class RoomstateC extends Command {
         if (arguments.length < 1) return;
 
         TurboChannel channel = chat.getChannel(arguments[0].substring(1));
-        boolean events = tags.size() < 4;
+        boolean events = tags.size() < 5;
 
         if (tags.containsKey("broadcaster-lang")) {
             String oldLanguage = channel.getLanguage();
@@ -63,6 +66,21 @@ public class RoomstateC extends Command {
             } else if (events && !subsOnly) {
                 chat.getEventManager().callEvent(new DisableSubsOnlyChatEvent(channel));
             }
+        }
+
+        if (tags.containsKey("emote-only")) {
+            boolean emoteOnly = tags.get("emote-only").equalsIgnoreCase("1");
+            channel.setEmoteOnly(emoteOnly);
+
+            if (events && emoteOnly) {
+                chat.getEventManager().callEvent(new EnableEmoteOnlyChatEvent(channel));
+            } else if (events && !emoteOnly) {
+                chat.getEventManager().callEvent(new DisableEmoteOnlyChatEvent(channel));
+            }
+        }
+
+        if (!events) {
+            chat.getEventManager().callEvent(new ChannelDataLoadedEvent(channel));
         }
 
     }
