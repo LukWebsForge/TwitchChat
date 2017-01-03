@@ -1,8 +1,9 @@
 package de.lukweb.twitchchat.twitch.commands;
 
+import de.lukweb.twitchchat.events.chat.ChatClientDataLoadedEvent;
 import de.lukweb.twitchchat.twitch.Command;
 import de.lukweb.twitchchat.twitch.TurboChat;
-import de.lukweb.twitchchat.twitch.messages.MessageAttributes;
+import de.lukweb.twitchchat.twitch.messages.StateAttributes;
 
 import java.util.Map;
 
@@ -14,6 +15,7 @@ public class GlobaluserstateC extends Command {
 
     @Override
     public void handle(String sender, Map<String, String> tags, String[] arguments, TurboChat chat) {
-        MessageAttributes attributes = new MessageAttributes(tags);
+        StateAttributes attributes = new StateAttributes(tags);
+        chat.getEventManager().callEvent(new ChatClientDataLoadedEvent(attributes));
     }
 }

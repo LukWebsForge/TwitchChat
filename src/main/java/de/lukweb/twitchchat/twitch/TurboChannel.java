@@ -23,6 +23,8 @@ public class TurboChannel implements TwitchChannel {
     private boolean subsOnly;
     private int slowMode;
 
+    private String hosting;
+
     private String messagePrefix;
 
     TurboChannel(String name, TurboChat chat) {
@@ -125,6 +127,14 @@ public class TurboChannel implements TwitchChannel {
     @Override
     public void sendWhisper(String to, String message) {
         sendMessage(".w " + to + " " + message);
+    }
+
+    public String getHosting() {
+        return hosting;
+    }
+
+    public void setHosting(String hosting) {
+        this.hosting = hosting;
     }
 
     @Override
