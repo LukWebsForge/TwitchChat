@@ -8,7 +8,7 @@ public class UserDonateBitsEvent extends UserSendMessageEvent {
     private int bits;
 
     public UserDonateBitsEvent(TwitchUser user, String message, MessageAttributes attributes, int bits) {
-        super(user, message, attributes);
+        super(user, message, attributes, false);
         this.bits = bits;
     }
 

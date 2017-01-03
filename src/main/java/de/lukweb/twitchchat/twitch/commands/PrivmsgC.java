@@ -27,6 +27,9 @@ public class PrivmsgC extends Command {
 
         user.update(attributes);
 
+        boolean emoteMessage = message.charAt(0) == 1;
+        if (emoteMessage) message = message.substring(1, message.length() - 1);
+
         UserSendMessageEvent event;
         if (tags.containsKey("bits")) {
             try {
@@ -35,7 +38,7 @@ public class PrivmsgC extends Command {
                 return;
             }
         } else {
-            event = new UserSendMessageEvent(user, message, attributes);
+            event = new UserSendMessageEvent(user, message, attributes, emoteMessage);
         }
 
         chat.getEventManager().callEvent(event);

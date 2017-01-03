@@ -2,20 +2,7 @@ package de.lukweb.twitchchat.twitch;
 
 import de.lukweb.twitchchat.events.irc.IrcReceiveMessageEvent;
 import de.lukweb.twitchchat.irc.IrcInputHandler;
-import de.lukweb.twitchchat.twitch.commands.CapC;
-import de.lukweb.twitchchat.twitch.commands.ClearchatC;
-import de.lukweb.twitchchat.twitch.commands.GlobaluserstateC;
-import de.lukweb.twitchchat.twitch.commands.HosttargetC;
-import de.lukweb.twitchchat.twitch.commands.JoinC;
-import de.lukweb.twitchchat.twitch.commands.ModeC;
-import de.lukweb.twitchchat.twitch.commands.NoticeC;
-import de.lukweb.twitchchat.twitch.commands.PartC;
-import de.lukweb.twitchchat.twitch.commands.PingC;
-import de.lukweb.twitchchat.twitch.commands.PrivmsgC;
-import de.lukweb.twitchchat.twitch.commands.ReconnectC;
-import de.lukweb.twitchchat.twitch.commands.RoomstateC;
-import de.lukweb.twitchchat.twitch.commands.UsernoticeC;
-import de.lukweb.twitchchat.twitch.commands.UserstateC;
+import de.lukweb.twitchchat.twitch.commands.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,7 +34,8 @@ public class TwitchInputHandler implements IrcInputHandler {
                 new ReconnectC(),
                 new RoomstateC(),
                 new UsernoticeC(),
-                new UserstateC()
+                new UserstateC(),
+                new WhisperC()
         };
         for (Command command : commandsArr) commands.put(command.getName().toLowerCase(), command);
     }
@@ -80,7 +68,7 @@ public class TwitchInputHandler implements IrcInputHandler {
         String[] arguments = Arrays.copyOfRange(splitted, 1, splitted.length);
 
         if (isInt(command)) {
-            // This is just a info message from twitch or message about channels
+            // This is just a info message from twitch or a message about channels
             return;
         }
 
