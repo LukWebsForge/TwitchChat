@@ -84,6 +84,7 @@ public interface TwitchChannel {
     /**
      * Gets a chatter by its name. If the chatter wasn't found in this channel this method will return null.
      *
+     * @param name the name of the chatter
      * @return a chatter by its name
      */
     TwitchUser getChatter(String name);

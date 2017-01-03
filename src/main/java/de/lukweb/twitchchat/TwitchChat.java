@@ -69,6 +69,7 @@ public interface TwitchChat {
      *
      * @param username The account's twitch username
      * @param oauthkey The OAuth Password of the account
+     * @return A Twitch chat client
      */
     static TwitchChat build(String username, String oauthkey) {
         return new TurboChat(username, oauthkey);
