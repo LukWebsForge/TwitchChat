@@ -1,10 +1,12 @@
 package de.lukweb.twitchchat.twitch.messages;
 
 import de.lukweb.twitchchat.TwitchRank;
+import de.lukweb.twitchchat.TwitchUser;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MessageAttributes {
 
@@ -158,6 +160,26 @@ public class MessageAttributes {
     public int getAllBits() {
         for (MessageBadge badge : badges) if (badge.getName().equals("bits")) return badge.getValue();
         return 0;
+    }
+
+    /**
+     * Compares whether the attributes of {@link TwitchUser} are equals to this ones.
+     *
+     * @param user the user to compare with
+     * @return whether the attributes are equal
+     */
+    public boolean compareTo(TwitchUser user) {
+        if (user.getUserId() != userId) return false;
+        if (!Objects.equals(user.getDisplayName(), displayName)) return false;
+        if (!Objects.equals(user.getRank(), rank)) return false;
+        if (user.isBroadcaster() != isBroadcaster()) return false;
+        if (user.isTurbo() != isTurbo()) return false;
+        if (user.isPrime() != isPrime()) return false;
+        if (user.isMod() != isMod()) return false;
+        if (user.isSubscriber() != isSubscriber()) return false;
+        if (!Objects.equals(user.getColor(), color)) return false;
+        if (user.getDonatedBitAmount() != getAllBits()) return false;
+        return true;
     }
 }
 

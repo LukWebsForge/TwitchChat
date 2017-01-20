@@ -3,6 +3,7 @@ package de.lukweb.twitchchat.twitch;
 import de.lukweb.twitchchat.events.irc.IrcReceiveMessageEvent;
 import de.lukweb.twitchchat.irc.IrcInputHandler;
 import de.lukweb.twitchchat.twitch.commands.*;
+import de.lukweb.twitchchat.twitch.utils.IntegerUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -67,7 +68,7 @@ public class TwitchInputHandler implements IrcInputHandler {
         String command = splitted[0];
         String[] arguments = Arrays.copyOfRange(splitted, 1, splitted.length);
 
-        if (isInt(command)) {
+        if (IntegerUtils.isInt(command)) {
             // This is just a info message from twitch or a message about channels
             return;
         }
@@ -79,14 +80,5 @@ public class TwitchInputHandler implements IrcInputHandler {
         }
 
         commands.get(command.toLowerCase()).handle(sender, tags, arguments, chat);
-    }
-
-    private boolean isInt(String string) {
-        try {
-            Integer.parseInt(string);
-            return true;
-        } catch (NumberFormatException ignored) {
-            return false;
-        }
     }
 }

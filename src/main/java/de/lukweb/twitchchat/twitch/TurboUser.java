@@ -3,6 +3,7 @@ package de.lukweb.twitchchat.twitch;
 import de.lukweb.twitchchat.TwitchChannel;
 import de.lukweb.twitchchat.TwitchRank;
 import de.lukweb.twitchchat.TwitchUser;
+import de.lukweb.twitchchat.events.user.UserDataUpdateEvent;
 import de.lukweb.twitchchat.twitch.messages.MessageAttributes;
 
 /**
@@ -12,7 +13,7 @@ public class TurboUser implements TwitchUser {
 
     private String name;
     private int userid;
-    private TwitchChannel channel;
+    private TurboChannel channel;
 
     private TwitchRank rank;
     private boolean broadcaster;
@@ -29,7 +30,7 @@ public class TurboUser implements TwitchUser {
     private String displayName;
     private int donatedBits;
 
-    public TurboUser(String name, TwitchChannel channel) {
+    public TurboUser(String name, TurboChannel channel) {
         this.name = name;
         this.channel = channel;
     }
@@ -130,6 +131,11 @@ public class TurboUser implements TwitchUser {
     }
 
     public void update(MessageAttributes attributes) {
+
+        // We call the event if the attributes are different
+        if (!attributes.compareTo(this))
+            channel.getChat().getEventManager().callEvent(new UserDataUpdateEvent(this, attributes));
+
         if (attributes.getUserId() > 0) userid = attributes.getUserId();
         if (attributes.getDisplayName() != null) displayName = attributes.getDisplayName();
 

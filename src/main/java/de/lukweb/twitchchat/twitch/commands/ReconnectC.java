@@ -1,5 +1,6 @@
 package de.lukweb.twitchchat.twitch.commands;
 
+import de.lukweb.twitchchat.events.chat.ChatReconnectEvent;
 import de.lukweb.twitchchat.twitch.Command;
 import de.lukweb.twitchchat.twitch.TurboChat;
 
@@ -13,6 +14,8 @@ public class ReconnectC extends Command {
 
     @Override
     public void handle(String sender, Map<String, String> tags, String[] arguments, TurboChat chat) {
+        chat.getEventManager().callEvent(new ChatReconnectEvent());
 
+        // todo add reconnect impl
     }
 }

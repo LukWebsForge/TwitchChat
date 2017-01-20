@@ -107,6 +107,10 @@ public class TurboChat implements TwitchChat {
         capabilities.add(capability);
     }
 
+    public void reconnect() {
+
+    }
+
     @Override
     public void close() {
         for (TwitchChannel channel : channels.values()) {

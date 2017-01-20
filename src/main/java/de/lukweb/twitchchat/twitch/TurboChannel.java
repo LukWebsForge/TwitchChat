@@ -37,6 +37,10 @@ public class TurboChannel implements TwitchChannel {
         messagePrefix = ":" + username + "!" + username + "@" + username + ".tmi.twitch.tv ";
     }
 
+    public TurboChat getChat() {
+        return chat;
+    }
+
     @Override
     public String getName() {
         return name;
@@ -47,13 +51,17 @@ public class TurboChannel implements TwitchChannel {
         return roomid;
     }
 
-    public void setRoomid(int roomid) {
+    public void setRoomId(int roomid) {
         this.roomid = roomid;
     }
 
     @Override
     public void sendMessage(String message) {
         chat.sendRawMessage(messagePrefix + "PRIVMSG #" + name + " :" + message, false); // todo change 2. parameter
+    }
+
+    public TurboUser getOwnChatter() {
+        return createTurboChatter(chat.getUsername());
     }
 
     @Override
