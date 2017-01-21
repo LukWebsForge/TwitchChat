@@ -28,6 +28,7 @@ public class TwitchInputHandler implements IrcInputHandler {
                 new HosttargetC(),
                 new JoinC(),
                 new ModeC(),
+                new NamesC(),
                 new NoticeC(),
                 new PartC(),
                 new PingC(),
@@ -69,8 +70,12 @@ public class TwitchInputHandler implements IrcInputHandler {
         String[] arguments = Arrays.copyOfRange(splitted, 1, splitted.length);
 
         if (IntegerUtils.isInt(command)) {
-            // This is just a info message from twitch or a message about channels
-            return;
+            if (arguments.length >= 2 && arguments[1].equals("=")) {
+                command = "names";
+            } else {
+                // This is just a info message from twitch
+                return;
+            }
         }
 
         if (!commands.containsKey(command.toLowerCase())) {
