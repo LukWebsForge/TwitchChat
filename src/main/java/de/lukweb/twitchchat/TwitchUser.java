@@ -82,11 +82,40 @@ public interface TwitchUser {
      */
     String getColor();
 
+    /**
+     * Gets whether the user is banned in this channel. Bans on Twitch are usually infinite.
+     *
+     * @return whether the user is banned
+     */
     boolean isBanned();
 
+    /**
+     * Gets whether the user is timeouted in this channel. You can get the date until the end of the timeout using
+     * the {@link TwitchUser#getTimeoutUntil()} method.
+     *
+     * @return whether the user is timeouted
+     */
     boolean isTimeouted();
 
-    int getTimeoutUntil();
+    /**
+     * Gets the date until the user is timeouted / banned from this channel. The date is returned as unix timestamp.
+     *
+     * @return the date until the user is banned
+     */
+    long getTimeoutUntil();
 
+    /**
+     * Gets the amount of bits the user donated for this channel
+     *
+     * @return the amount of bits the user donated for this channel
+     */
     int getDonatedBitAmount();
+
+    /**
+     * Sends a whipser message to this user. There should be a delay of 350 ms between whispers, because the
+     * {@link de.lukweb.twitchchat.irc.MessageDelayer} currently not covers this.
+     *
+     * @param message the message to be sent
+     */
+    void sendWhisper(String message);
 }

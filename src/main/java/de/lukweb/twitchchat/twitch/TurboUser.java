@@ -24,7 +24,7 @@ public class TurboUser implements TwitchUser {
     private boolean operator;
 
     private boolean banned;
-    private int timeouted;
+    private long timeouted;
 
     private String color;
     private String displayName;
@@ -40,10 +40,6 @@ public class TurboUser implements TwitchUser {
         return userid;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
-    }
-
     @Override
     public String getName() {
         return name;
@@ -57,6 +53,11 @@ public class TurboUser implements TwitchUser {
     @Override
     public TwitchRank getRank() {
         return rank;
+    }
+
+    public void setRank(TwitchRank rank) {
+        this.rank = rank;
+        if (!rank.equals(TwitchRank.NONE)) mod = true;
     }
 
     @Override
@@ -77,6 +78,10 @@ public class TurboUser implements TwitchUser {
     @Override
     public boolean isMod() {
         return mod;
+    }
+
+    public void setMod(boolean mod) {
+        this.mod = mod;
     }
 
     @Override
@@ -113,11 +118,11 @@ public class TurboUser implements TwitchUser {
     }
 
     @Override
-    public int getTimeoutUntil() {
+    public long getTimeoutUntil() {
         return timeouted;
     }
 
-    public void setTimeouted(int duration) {
+    public void setTimeouted(long duration) {
         timeouted = (int) ((System.currentTimeMillis() / 1000) + duration);
     }
 
@@ -148,6 +153,11 @@ public class TurboUser implements TwitchUser {
 
         color = attributes.getColor();
         donatedBits = attributes.getAllBits();
+    }
+
+    @Override
+    public void sendWhisper(String message) {
+        channel.sendMessage(".w " + name + " " + message);
     }
 
     @Override

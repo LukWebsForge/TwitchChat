@@ -5,9 +5,9 @@ import de.lukweb.twitchchat.TwitchUser;
 public class UserTimeoutedEvent extends UserEvent {
 
     private String reason;
-    private int duration;
+    private long duration;
 
-    public UserTimeoutedEvent(TwitchUser user, String reason, int duration) {
+    public UserTimeoutedEvent(TwitchUser user, String reason, long duration) {
         super(user);
         this.reason = reason;
         this.duration = duration;
@@ -17,7 +17,7 @@ public class UserTimeoutedEvent extends UserEvent {
         return reason;
     }
 
-    public int getDuration() {
+    public long getDuration() {
         return duration;
     }
 }

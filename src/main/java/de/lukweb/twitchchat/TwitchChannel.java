@@ -1,6 +1,7 @@
 package de.lukweb.twitchchat;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface TwitchChannel {
 
@@ -24,6 +25,35 @@ public interface TwitchChannel {
      * @param message the message will be sent
      */
     void sendMessage(String message);
+
+    /**
+     * This method loads all chatters in this channel using the Twitch Message Infrastructure.
+     * It can be extremly useful for channels with more than 1000 chatters, because the names command recived during the
+     * channel join doesn't contains always all users, in the case with more than 1000 chatters, there are only mods.
+     * BUT: The Twitch Message Infrastructure endpoint isn't documented. This means it can be removed in the future.
+     */
+    void loadHTTPChatters();
+
+    /**
+     * This method loads all chatters in this channel using the Twitch Message Infrastructure.
+     * It can be extremly useful for channels with more than 1000 chatters, because the names command recived during the
+     * channel join doesn't contains always all users, in the case with more than 1000 chatters, there are only mods.
+     * BUT: The Twitch Message Infrastructure endpoint isn't documented. This means it can be removed in the future.
+     *
+     * @param async whether the users should be fetched asynchronous
+     */
+    void loadHTTPChatters(boolean async);
+
+    /**
+     * This method loads all chatters in this channel using the Twitch Message Infrastructure.
+     * It can be extremly useful for channels with more than 1000 chatters, because the names command recived during the
+     * channel join doesn't contains always all users, in the case with more than 1000 chatters, there are only mods.
+     * BUT: The Twitch Message Infrastructure endpoint isn't documented. This means it can be removed in the future.
+     *
+     * @param async   whether the users should be fetched asynchronous
+     * @param success whether a error occured during the web request
+     */
+    void loadHTTPChatters(boolean async, Consumer<Boolean> success);
 
     /**
      * Gets the language definided by the broadcaster for the chat. The language may be an emtpy string if there the
@@ -68,16 +98,6 @@ public interface TwitchChannel {
      * @return the time users must wait between sending messages
      */
     int getSlowModeTime();
-
-    /**
-     * Sends a whipser message to a user in this channel. The user must be in THIS channel. There should be a delay
-     * of 350 ms between whispers, because the {@link de.lukweb.twitchchat.irc.MessageDelayer} currently not covers
-     * this.
-     *
-     * @param to      user who will recive this message
-     * @param message the message
-     */
-    void sendWhisper(String to, String message);
 
     /**
      * Gets a list of chatters in this channel. If there are more than 1000 users in this channel the list may

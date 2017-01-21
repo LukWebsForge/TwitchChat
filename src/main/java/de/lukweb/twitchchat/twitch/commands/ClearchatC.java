@@ -31,7 +31,7 @@ public class ClearchatC extends Command {
             String reason = tags.get("ban-reason");
 
             if (tags.containsKey("ban-duration")) {
-                int duration = Integer.parseInt(tags.get("ban-duration"));
+                long duration = Long.parseLong(tags.get("ban-duration"));
                 user.setTimeouted(duration);
                 chat.getEventManager().callEvent(new UserTimeoutedEvent(user, reason, duration));
             } else {

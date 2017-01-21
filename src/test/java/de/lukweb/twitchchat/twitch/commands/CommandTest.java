@@ -67,7 +67,7 @@ public class CommandTest {
 
         List<String> usernames = new ArrayList<>();
         List<String> reasons = new ArrayList<>();
-        List<Integer> duration = new ArrayList<>();
+        List<Long> duration = new ArrayList<>();
         lock = new CountDownLatch(3);
 
         env.getChat().getEventManager().register(new Listener() {
@@ -101,7 +101,7 @@ public class CommandTest {
 
         assertEquals(usernames, Arrays.asList("evil_user", "other_user", "very_evil_user"));
         assertEquals(reasons, Arrays.asList("Evil", "Ham", "Nope"));
-        assertEquals(duration, Arrays.asList(15, 4));
+        assertEquals(duration, Arrays.asList(15L, 4L));
     }
 
 }

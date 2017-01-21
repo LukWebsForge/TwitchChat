@@ -1,11 +1,16 @@
 package de.lukweb.twitchchat.twitch;
 
 import de.lukweb.twitchchat.TwitchChannel;
+import de.lukweb.twitchchat.TwitchRank;
 import de.lukweb.twitchchat.TwitchUser;
+import de.lukweb.twitchchat.events.user.UserJoinChannelEvent;
+import de.lukweb.twitchchat.twitch.utils.HttpUtils;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Implementation of the {@link TwitchChannel}
@@ -93,6 +98,47 @@ public class TurboChannel implements TwitchChannel {
     }
 
     @Override
+    public void loadHTTPChatters() {
+        loadHTTPChatters(true);
+    }
+
+    @Override
+    public void loadHTTPChatters(boolean async) {
+        loadHTTPChatters(true, success -> {
+        });
+    }
+
+    @Override
+    public void loadHTTPChatters(boolean async, Consumer<Boolean> success) {
+        if (async) {
+            new Thread(() -> success.accept(readHTTPChatters())).start();
+        } else {
+            success.accept(readHTTPChatters());
+        }
+    }
+
+    private boolean readHTTPChatters() {
+        String answer = HttpUtils.get("https://tmi.twitch.tv/group/user/" + name + "/chatters");
+        if (answer == null) return false;
+        JSONObject json = new JSONObject(answer);
+        JSONObject chatters = json.getJSONObject("chatters");
+
+        chatters.getJSONArray("moderators").forEach(name -> addHTTPChatter((String) name, TwitchRank.CHANNEL_MOD));
+        chatters.getJSONArray("staff").forEach(name -> addHTTPChatter((String) name, TwitchRank.STAFF));
+        chatters.getJSONArray("admins").forEach(name -> addHTTPChatter((String) name, TwitchRank.ADMIN));
+        chatters.getJSONArray("global_mods").forEach(name -> addHTTPChatter((String) name, TwitchRank.GLOBAL_MOD));
+        chatters.getJSONArray("viewers").forEach(name -> addHTTPChatter((String) name, TwitchRank.NONE));
+
+        return true;
+    }
+
+    private void addHTTPChatter(String name, TwitchRank rank) {
+        TurboUser chatter = createTurboChatter(name);
+        chatter.setRank(rank);
+        chat.getEventManager().callEvent(new UserJoinChannelEvent(chatter, this));
+    }
+
+    @Override
     public String getLanguage() {
         return language;
     }
@@ -140,11 +186,6 @@ public class TurboChannel implements TwitchChannel {
 
     public void setEmoteOnly(boolean emoteOnly) {
         this.emoteOnly = emoteOnly;
-    }
-
-    @Override
-    public void sendWhisper(String to, String message) {
-        sendMessage(".w " + to + " " + message);
     }
 
     public String getHosting() {
