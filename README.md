@@ -1,7 +1,7 @@
 # TwitchChat
-A simple IRC client for Twitch.
+A simple IRC client for Twitch
 
-This library is currently under heavy development, so not everything may work.
+:tada: **The first release candidate is out!** Happy testing!
 
 [![Build Status](https://travis-ci.org/lukweb-de/TwitchChat.svg?branch=master)](https://travis-ci.org/lukweb-de/TwitchChat)
 [![JitPack](https://jitpack.io/v/lukweb-de/TwitchChat.svg)](https://jitpack.io/#lukweb-de/TwitchChat)
