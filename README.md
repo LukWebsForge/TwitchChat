@@ -3,8 +3,8 @@ A simple IRC client for Twitch
 
 :tada: **The first release candidate is out!** Happy testing!
 
-[![Build Status](https://travis-ci.org/lukweb-de/TwitchChat.svg?branch=master)](https://travis-ci.org/lukweb-de/TwitchChat)
-[![JitPack](https://jitpack.io/v/lukweb-de/TwitchChat.svg)](https://jitpack.io/#lukweb-de/TwitchChat)
+[![Build Status](https://travis-ci.org/LukWebsForge/TwitchChat.svg?branch=master)](https://travis-ci.org/LukWebsForg/TwitchChat)
+[![JitPack](https://jitpack.io/v/LukWebsForge/TwitchChat.svg)](https://jitpack.io/#LukWebsForge/TwitchChat)
 
 
 ## Getting Started
