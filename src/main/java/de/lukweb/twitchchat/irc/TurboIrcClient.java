@@ -15,6 +15,7 @@ import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,6 +55,7 @@ public class TurboIrcClient implements IrcClient {
     private BufferedReader in;
     private DataOutputStream out;
     private IrcInputHandler inputHandler;
+    private Consumer<Throwable> errorHandler;
 
     private boolean close;
 
@@ -103,6 +105,11 @@ public class TurboIrcClient implements IrcClient {
     }
 
     @Override
+    public void setErrorHandler(Consumer<Throwable> errorHandler) {
+        this.errorHandler = errorHandler;
+    }
+
+    @Override
     public void sendString(String message) {
         try {
             out.write((message + "\n").getBytes());
@@ -114,8 +121,7 @@ public class TurboIrcClient implements IrcClient {
 
     @Override
     public boolean isConnected() {
-        if (close) return false;
-        return socket.isConnected();
+        return !close && socket.isConnected();
     }
 
     @Override
@@ -135,6 +141,10 @@ public class TurboIrcClient implements IrcClient {
     }
 
     private void catchException(Throwable throwable) {
-        Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, throwable);
+        if (errorHandler != null) {
+            errorHandler.accept(throwable);
+        } else {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, throwable);
+        }
     }
 }

@@ -80,7 +80,7 @@ public class TwitchInputHandler implements IrcInputHandler {
 
         if (!commands.containsKey(command.toLowerCase())) {
             // something is broken ):
-            System.out.println("unregistered command: " + command);
+            chat.warn("Unregistered command: " + command);
             return;
         }
 

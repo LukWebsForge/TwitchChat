@@ -3,13 +3,17 @@ package de.lukweb.twitchchat;
 import de.lukweb.twitchchat.events.EventManager;
 import de.lukweb.twitchchat.twitch.TurboChat;
 
+import java.util.function.Consumer;
+
 public interface TwitchChat {
 
     /**
      * (Re-)Connects the chat instance with the Twitch IRC.
      * WARNING: Messages in cache may be purged.
+     *
+     * @return whether the connection attempt was successful
      */
-    void connect();
+    boolean connect();
 
     /**
      * Returns whether the client is connected to the Twitch server.
@@ -57,6 +61,13 @@ public interface TwitchChat {
      * @param operator whether the twitch client is a operator in this channel
      */
     void sendRawMessage(String message, boolean operator);
+
+    /**
+     * Sets a callback for handling warnings. Set it to null to set it to the default value.
+     *
+     * @param callback the callback for handling warnings
+     */
+    void setWarningOutput(Consumer<String> callback);
 
     /**
      * Closes the connection to all channels and the irc. Use the method {@link TwitchChat#connect()} to connect again.

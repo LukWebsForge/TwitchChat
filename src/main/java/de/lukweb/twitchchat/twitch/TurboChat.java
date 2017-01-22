@@ -3,6 +3,8 @@ package de.lukweb.twitchchat.twitch;
 import de.lukweb.twitchchat.TwitchChannel;
 import de.lukweb.twitchchat.TwitchChat;
 import de.lukweb.twitchchat.events.EventManager;
+import de.lukweb.twitchchat.events.chat.ChatReconnectFailedEvent;
+import de.lukweb.twitchchat.events.chat.ChatReconnectSuccessEvent;
 import de.lukweb.twitchchat.irc.IrcClient;
 import de.lukweb.twitchchat.irc.MessageDelayer;
 import de.lukweb.twitchchat.irc.TurboIrcClient;
@@ -13,6 +15,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Implementation of {@link TwitchChat}
@@ -27,20 +30,24 @@ public class TurboChat implements TwitchChat {
     private MessageDelayer messageDelayer;
     private List<String> capabilities = new ArrayList<>();
     private HashMap<String, TurboChannel> channels = new HashMap<>();
+    private Consumer<String> warningsCallback;
 
     public TurboChat(String username, String oauthkey) {
         this.username = username.toLowerCase();
         this.oauthkey = oauthkey.startsWith("oauth:") ? oauthkey : "oauth:" + oauthkey;
         this.eventManager = new EventManager();
+        setWarningOutput(null);
     }
 
     @Override
-    public void connect() {
+    public boolean connect() {
         try {
             TurboIrcClient irc = new TurboIrcClient("irc.chat.twitch.tv", 443, true);
             connect(irc, new TurboMessageDelayer(this, irc));
+            return true;
         } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
+            warn("Error while connecting: " + e.getMessage());
+            return false;
         }
     }
 
@@ -48,6 +55,7 @@ public class TurboChat implements TwitchChat {
         this.irc = client;
         this.messageDelayer = messageDelayer;
         irc.setInputHandler(new TwitchInputHandler(this));
+        irc.setErrorHandler(error -> warn("Error @ IRC-Client: " + error.getMessage()));
         sendRawMessage("CAP REQ :twitch.tv/membership");
         sendRawMessage("CAP REQ :twitch.tv/commands");
         sendRawMessage("CAP REQ :twitch.tv/tags");
@@ -103,12 +111,37 @@ public class TurboChat implements TwitchChat {
         messageDelayer.queue(message, operator);
     }
 
+    @Override
+    public void setWarningOutput(Consumer<String> callback) {
+        if (callback == null) {
+            this.warningsCallback = warning -> System.err.println("TwitchChat Warning: " + warning);
+        } else {
+            this.warningsCallback = callback;
+        }
+    }
+
+    public void warn(String warning) {
+        warningsCallback.accept(warning);
+    }
+
     public void addCapability(String capability) {
         capabilities.add(capability);
     }
 
     public void reconnect() {
-
+        close();
+        for (int i = 0; i < 25; i++) {
+            if (connect()) {
+                getEventManager().callEvent(new ChatReconnectSuccessEvent());
+                return;
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) {
+            }
+        }
+        warn("No connection to the Twitch IRC Server could be established");
+        getEventManager().callEvent(new ChatReconnectFailedEvent());
     }
 
     @Override

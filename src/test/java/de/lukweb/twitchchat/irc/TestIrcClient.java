@@ -2,6 +2,7 @@ package de.lukweb.twitchchat.irc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TestIrcClient implements IrcClient {
 
@@ -18,6 +19,10 @@ public class TestIrcClient implements IrcClient {
     @Override
     public void setInputHandler(IrcInputHandler inputHandler) {
         this.inputHandler = inputHandler;
+    }
+
+    @Override
+    public void setErrorHandler(Consumer<Throwable> errorHandler) {
     }
 
     public void sendStringAsTwitch(String message) {
