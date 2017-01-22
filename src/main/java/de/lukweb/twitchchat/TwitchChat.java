@@ -75,8 +75,8 @@ public interface TwitchChat {
     void close();
 
     /**
-     * Initalizes the TwitchChatClient. To get an OAuth Password visit<a href="https://twitchapps.com/tmi/">this</a>
-     * side. Call the method {@link TurboChat#connect()} to open a connection to the Twitch IRC.
+     * Initalizes the TwitchChatClient. To get an OAuth Password visit <a href="https://twitchapps.com/tmi/">this</a>
+     * site. Call the method {@link TurboChat#connect()} to open a connection to the Twitch IRC.
      *
      * @param username The account's twitch username
      * @param oauthkey The OAuth Password of the account
