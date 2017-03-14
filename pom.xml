@@ -6,11 +6,11 @@
 
     <groupId>de.lukweb</groupId>
     <artifactId>TwitchChat</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.01-SNAPSHOT</version>
 
     <name>TwitchChat</name>
     <description>A simple IRC client for Twitch</description>
-    <url>https://github.com/lukweb-de/TwitchChat</url>
+    <url>https://github.com/LukWebsForge/TwitchChat</url>
     <packaging>jar</packaging>
 
     <licenses>
@@ -22,14 +22,14 @@
     </licenses>
 
     <issueManagement>
-        <url>https://github.com/lukweb-de/TwitchChat/issues</url>
+        <url>https://github.com/LukWebsForge/TwitchChat/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/lukweb-de/TwitchChat</url>
-        <connection>scm:git:git://github.com/lukweb-de/TwitchChat.git</connection>
-        <developerConnection>scm:git:git@github.com:lukweb-de/TwitchChat.git</developerConnection>
+        <url>https://github.com/LukWebsForge/TwitchChat</url>
+        <connection>scm:git:git://github.com/LukWebsForge/TwitchChat.git</connection>
+        <developerConnection>scm:git:git@github.com:LukWebsForge/TwitchChat.git</developerConnection>
     </scm>
 
     <developers>
@@ -38,7 +38,7 @@
             <email>luk.bukkit@gmail.com</email>
             <url>https://github.com/LukBukkit</url>
             <organization>LukWeb</organization>
-            <organizationUrl>https://github.com/lukweb-de</organizationUrl>
+            <organizationUrl>https://github.com/LukWebsForge</organizationUrl>
             <timezone>Europe/Berlin</timezone>
         </developer>
     </developers>

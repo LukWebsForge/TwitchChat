@@ -1,5 +1,7 @@
 package de.lukweb.twitchchat.irc;
 
+import de.lukweb.twitchchat.twitch.utils.DebugLogger;
+
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
@@ -56,15 +58,16 @@ public class TurboIrcClient implements IrcClient {
     private DataOutputStream out;
     private IrcInputHandler inputHandler;
     private Consumer<Throwable> errorHandler;
+    private Logger debugLogger;
 
     private boolean close;
 
-    public TurboIrcClient(String host, int port, boolean ssl)
-            throws IOException, GeneralSecurityException {
+    public TurboIrcClient(String host, int port, boolean ssl) throws IOException, GeneralSecurityException {
         if (sslSocketFactory == null) init();
         this.host = host;
         this.port = port;
         this.ssl = ssl;
+        this.debugLogger = DebugLogger.get("IrcClient");
         connect();
     }
 
@@ -92,6 +95,7 @@ public class TurboIrcClient implements IrcClient {
                     String line = in.readLine();
                     if (line == null || inputHandler == null) continue;
                     inputHandler.handle(line);
+                    this.debugLogger.fine("Received: " + line);
                 } catch (IOException e) {
                     catchException(e);
                 }
@@ -114,6 +118,7 @@ public class TurboIrcClient implements IrcClient {
         try {
             out.write((message + "\n").getBytes());
             out.flush();
+            this.debugLogger.fine("Sent: " + message);
         } catch (IOException ex) {
             catchException(ex);
         }
@@ -138,6 +143,10 @@ public class TurboIrcClient implements IrcClient {
         } catch (IOException e) {
             catchException(e);
         }
+    }
+
+    public void setDebug(boolean debug) {
+        debugLogger.setLevel(debug ? Level.ALL : Level.OFF);
     }
 
     private void catchException(Throwable throwable) {
