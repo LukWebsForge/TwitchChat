@@ -4,11 +4,13 @@ import de.lukweb.twitchchat.TwitchChannel;
 import de.lukweb.twitchchat.TwitchRank;
 import de.lukweb.twitchchat.TwitchUser;
 import de.lukweb.twitchchat.events.user.UserJoinChannelEvent;
+import de.lukweb.twitchchat.twitch.utils.EmptyConsumer;
 import de.lukweb.twitchchat.twitch.utils.HttpUtils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -21,6 +23,7 @@ public class TurboChannel implements TwitchChannel {
     private String name;
     private TurboChat chat;
     private List<TurboUser> chatters;
+    private HashMap<String, Consumer<TwitchUser>> availableCallbacks;
 
     // Attributes: https://github.com/justintv/Twitch-API/blob/master/IRC.md#roomstate-1
     private String language;
@@ -37,6 +40,7 @@ public class TurboChannel implements TwitchChannel {
         this.name = name;
         this.chat = chat;
         this.chatters = new ArrayList<>();
+        this.availableCallbacks = new HashMap<>();
         this.language = "";
         String username = chat.getUsername();
         messagePrefix = ":" + username + "!" + username + "@" + username + ".tmi.twitch.tv ";
@@ -84,12 +88,22 @@ public class TurboChannel implements TwitchChannel {
         return null;
     }
 
+    @Override
+    public void getChatterWhenAvailable(String name, Consumer<TwitchUser> userConsumer) {
+        if (getChatter(name) != null) {
+            userConsumer.accept(getChatter(name));
+            return;
+        }
+        availableCallbacks.put(name.toLowerCase(), userConsumer);
+    }
+
     public TurboUser createTurboChatter(String name) {
         name = name.toLowerCase();
         TurboUser user = getChatter(name);
         if (user != null) return user;
         user = new TurboUser(name, this);
         chatters.add(user);
+        availableCallbacks.getOrDefault(name.toLowerCase(), new EmptyConsumer<>()).accept(user);
         return user;
     }
 

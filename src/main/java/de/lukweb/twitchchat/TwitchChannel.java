@@ -117,6 +117,15 @@ public interface TwitchChannel {
     TwitchUser getChatter(String name);
 
     /**
+     * Gets a chatter by its name when it's available. This will be fired instantly if the chatter is already
+     * available, otherwiese it will wait until a chatter with thi name joins the channel.
+     *
+     * @param name         the name of the chatter
+     * @param userConsumer the callback, which will be called when the chatter is available
+     */
+    void getChatterWhenAvailable(String name, Consumer<TwitchUser> userConsumer);
+
+    /**
      * Leaves this channel
      */
     void leave();

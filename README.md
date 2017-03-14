@@ -3,7 +3,7 @@ A simple IRC client for Twitch
 
 :tada: **The first release candidate is out!** Happy testing!
 
-[![Build Status](https://travis-ci.org/LukWebsForge/TwitchChat.svg?branch=master)](https://travis-ci.org/LukWebsForg/TwitchChat)
+[![Build Status](https://travis-ci.org/LukWebsForge/TwitchChat.svg?branch=master)](https://travis-ci.org/LukWebsForge/TwitchChat)
 [![JitPack](https://jitpack.io/v/LukWebsForge/TwitchChat.svg)](https://jitpack.io/#LukWebsForge/TwitchChat)
 
 
@@ -12,7 +12,7 @@ A simple IRC client for Twitch
 ### Download
 
 I recommend you to use a maven project for your application. You can use 
-[JitPack](https://jitpack.io/#lukweb-de/TwitchChat) to embed this library. A release on maven central is also 
+[JitPack](https://jitpack.io/#LukWebsForge/TwitchChat) to embed this library. A release on maven central is also 
 planned for the future. 
 
 ### Usage

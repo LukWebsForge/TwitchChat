@@ -5,6 +5,7 @@ import de.lukweb.twitchchat.TwitchChat;
 import de.lukweb.twitchchat.events.EventManager;
 import de.lukweb.twitchchat.events.chat.ChatReconnectFailedEvent;
 import de.lukweb.twitchchat.events.chat.ChatReconnectSuccessEvent;
+import de.lukweb.twitchchat.exceptions.InvalidCredentialsException;
 import de.lukweb.twitchchat.irc.IrcClient;
 import de.lukweb.twitchchat.irc.MessageDelayer;
 import de.lukweb.twitchchat.irc.TurboIrcClient;
@@ -31,10 +32,14 @@ public class TurboChat implements TwitchChat {
     private List<String> capabilities = new ArrayList<>();
     private HashMap<String, TurboChannel> channels = new HashMap<>();
     private Consumer<String> warningsCallback;
+    private boolean debug;
+    private Thread mainThread;
 
     public TurboChat(String username, String oauthkey) {
+        this.mainThread = Thread.currentThread();
         this.username = username.toLowerCase();
         this.oauthkey = oauthkey.startsWith("oauth:") ? oauthkey : "oauth:" + oauthkey;
+        // todo fire error if cannot connect
         this.eventManager = new EventManager();
         setWarningOutput(null);
     }
@@ -54,6 +59,7 @@ public class TurboChat implements TwitchChat {
     void connect(IrcClient client, MessageDelayer messageDelayer) {
         this.irc = client;
         this.messageDelayer = messageDelayer;
+        if (debug && irc instanceof TurboIrcClient) ((TurboIrcClient) irc).setDebug(debug);
         irc.setInputHandler(new TwitchInputHandler(this));
         irc.setErrorHandler(error -> warn("Error @ IRC-Client: " + error.getMessage()));
         sendRawMessage("CAP REQ :twitch.tv/membership");
@@ -142,6 +148,18 @@ public class TurboChat implements TwitchChat {
         }
         warn("No connection to the Twitch IRC Server could be established");
         getEventManager().callEvent(new ChatReconnectFailedEvent());
+    }
+
+    @Override
+    public void setDebug(boolean debug) {
+        this.debug = true;
+        if (irc instanceof TurboIrcClient) ((TurboIrcClient) irc).setDebug(true);
+    }
+
+    public void closeWrongCredentials() {
+        close();
+        mainThread.interrupt();
+        throw new InvalidCredentialsException();
     }
 
     @Override

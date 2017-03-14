@@ -47,7 +47,7 @@ public interface TwitchChat {
 
     /**
      * Sends a raw message to the IRC. The message will be delayed if the
-     * <a href="https://www.youtube.com/watch?v=0rNpHKSjIdQ">rate limit</a> was hit.
+     * <a href="https://github.com/justintv/Twitch-API/blob/master/IRC.md#command--message-limit">rate limit</a> was hit.
      *
      * @param message the message to be sent
      */
@@ -55,7 +55,7 @@ public interface TwitchChat {
 
     /**
      * Sends a raw message to the IRC. The message will be delayed if the
-     * <a href="https://www.youtube.com/watch?v=0rNpHKSjIdQ">rate limit</a> was hit.
+     * <a href="https://github.com/justintv/Twitch-API/blob/master/IRC.md#command--message-limit">rate limit</a> was hit.
      *
      * @param message  the message to be sent
      * @param operator whether the twitch client is a operator in this channel
@@ -68,6 +68,13 @@ public interface TwitchChat {
      * @param callback the callback for handling warnings
      */
     void setWarningOutput(Consumer<String> callback);
+
+    /**
+     * Method to (de)active the debug output of this libary
+     *
+     * @param debug wheater the mode should be activated
+     */
+    void setDebug(boolean debug);
 
     /**
      * Closes the connection to all channels and the irc. Use the method {@link TwitchChat#connect()} to connect again.
