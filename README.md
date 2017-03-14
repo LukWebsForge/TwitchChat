@@ -1,7 +1,7 @@
 # TwitchChat
 A simple IRC client for Twitch
 
-:tada: **The first release candidate is out!** Happy testing!
+:tada: **The second release candidate is out!** Happy testing!
 
 [![Build Status](https://travis-ci.org/LukWebsForge/TwitchChat.svg?branch=master)](https://travis-ci.org/LukWebsForge/TwitchChat)
 [![JitPack](https://jitpack.io/v/LukWebsForge/TwitchChat.svg)](https://jitpack.io/#LukWebsForge/TwitchChat)
