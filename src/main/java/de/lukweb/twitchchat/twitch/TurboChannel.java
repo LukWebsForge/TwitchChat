@@ -118,7 +118,7 @@ public class TurboChannel implements TwitchChannel {
 
     @Override
     public void loadHTTPChatters(boolean async) {
-        loadHTTPChatters(true, success -> {
+        loadHTTPChatters(async, success -> {
         });
     }
 

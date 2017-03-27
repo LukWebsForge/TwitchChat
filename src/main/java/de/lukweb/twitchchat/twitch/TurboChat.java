@@ -39,7 +39,6 @@ public class TurboChat implements TwitchChat {
         this.mainThread = Thread.currentThread();
         this.username = username.toLowerCase();
         this.oauthkey = oauthkey.startsWith("oauth:") ? oauthkey : "oauth:" + oauthkey;
-        // todo fire error if cannot connect
         this.eventManager = new EventManager();
         setWarningOutput(null);
     }
