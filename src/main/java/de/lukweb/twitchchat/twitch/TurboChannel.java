@@ -118,8 +118,7 @@ public class TurboChannel implements TwitchChannel {
 
     @Override
     public void loadHTTPChatters(boolean async) {
-        loadHTTPChatters(async, success -> {
-        });
+        loadHTTPChatters(async, success -> new EmptyConsumer<>());
     }
 
     @Override
@@ -147,9 +146,10 @@ public class TurboChannel implements TwitchChannel {
     }
 
     private void addHTTPChatter(String name, TwitchRank rank) {
+        boolean existsBefore = getChatter(name) != null;
         TurboUser chatter = createTurboChatter(name);
         chatter.setRank(rank);
-        chat.getEventManager().callEvent(new UserJoinChannelEvent(chatter, this));
+        if (!existsBefore) chat.getEventManager().callEvent(new UserJoinChannelEvent(chatter, this));
     }
 
     @Override
