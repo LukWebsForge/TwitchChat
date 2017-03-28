@@ -1,10 +1,7 @@
 package de.lukweb.twitchchat.twitch.commands;
 
-import de.lukweb.twitchchat.events.user.UserJoinChannelEvent;
 import de.lukweb.twitchchat.twitch.Command;
-import de.lukweb.twitchchat.twitch.TurboChannel;
 import de.lukweb.twitchchat.twitch.TurboChat;
-import de.lukweb.twitchchat.twitch.TurboUser;
 
 import java.util.Map;
 
@@ -21,9 +18,6 @@ public class JoinC extends Command {
         String username = getUsernameBySender(sender);
         String channel = arguments[0].substring(1);
 
-        TurboChannel turboChannel = chat.getChannel(channel);
-        TurboUser turboUser = turboChannel.createTurboChatter(username);
-
-        chat.getEventManager().callEvent(new UserJoinChannelEvent(turboUser, turboChannel));
+        chat.getChannel(channel).createTurboChatter(username);
     }
 }

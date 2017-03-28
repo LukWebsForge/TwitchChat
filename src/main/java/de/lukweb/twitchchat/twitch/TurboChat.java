@@ -163,9 +163,7 @@ public class TurboChat implements TwitchChat {
 
     @Override
     public void close() {
-        for (TwitchChannel channel : channels.values()) {
-            channel.leave();
-        }
+        for (TwitchChannel channel : channels.values()) channel.leave();
         irc.close();
     }
 }

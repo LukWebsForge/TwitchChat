@@ -1,10 +1,8 @@
 package de.lukweb.twitchchat.twitch.commands;
 
-import de.lukweb.twitchchat.events.user.UserJoinChannelEvent;
 import de.lukweb.twitchchat.twitch.Command;
 import de.lukweb.twitchchat.twitch.TurboChannel;
 import de.lukweb.twitchchat.twitch.TurboChat;
-import de.lukweb.twitchchat.twitch.TurboUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,10 +24,6 @@ public class NamesC extends Command {
         chatters.add(arguments[3].substring(1));
         chatters.addAll(Arrays.asList(arguments).subList(4, arguments.length));
 
-        chatters.forEach(name -> {
-            if (channel.getChatter(name) != null) return;
-            TurboUser chatter = channel.createTurboChatter(name);
-            chat.getEventManager().callEvent(new UserJoinChannelEvent(chatter, channel));
-        });
+        chatters.forEach(channel::createTurboChatter);
     }
 }

@@ -6,7 +6,7 @@
 
     <groupId>de.lukweb</groupId>
     <artifactId>TwitchChat</artifactId>
-    <version>1.01-SNAPSHOT</version>
+    <version>1.03-SNAPSHOT</version>
 
     <name>TwitchChat</name>
     <description>A simple IRC client for Twitch</description>
