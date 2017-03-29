@@ -11,9 +11,26 @@ A simple IRC client for Twitch
 
 ### Download
 
-I recommend you to use a maven project for your application. You can use 
-[JitPack](https://jitpack.io/#LukWebsForge/TwitchChat) to embed this library. A release on maven central is also 
-planned for the future. 
+I recommend you to use a maven project for your application. 
+You can use [JitPack](https://jitpack.io/#LukWebsForge/TwitchChat) to embed this library. 
+It will also relased on maven central when there's a stable version,
+currently you can use snapshot builds:
+```xml
+<repositories>
+    <repository>
+        <id>ossrh</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>de.lukweb</groupId>
+        <artifactId>twitchchat</artifactId>
+        <version>1.03-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+```
 
 ### Usage
 
