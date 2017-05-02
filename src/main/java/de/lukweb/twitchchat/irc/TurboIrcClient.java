@@ -100,7 +100,7 @@ public class TurboIrcClient implements IrcClient {
                     catchException(e);
                 }
             }
-        }).start();
+        }, "TwitchChat-InputHandler").start();
     }
 
     @Override

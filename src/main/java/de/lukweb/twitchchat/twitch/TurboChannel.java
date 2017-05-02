@@ -125,7 +125,7 @@ public class TurboChannel implements TwitchChannel {
     @Override
     public void loadHTTPChatters(boolean async, Consumer<Boolean> success) {
         if (async) {
-            new Thread(() -> success.accept(readHTTPChatters())).start();
+            new Thread(() -> success.accept(readHTTPChatters()), "TwitchChat-AsyncHttpChatters").start();
         } else {
             success.accept(readHTTPChatters());
         }

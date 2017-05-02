@@ -38,7 +38,7 @@ public class TurboMessageDelayer implements MessageDelayer {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        }, "TwitchChat-MessageDelayer").start();
     }
 
     @Override

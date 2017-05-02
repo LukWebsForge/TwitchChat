@@ -15,6 +15,6 @@ public class ReconnectC extends Command {
     @Override
     public void handle(String sender, Map<String, String> tags, String[] arguments, TurboChat chat) {
         chat.getEventManager().callEvent(new ChatReconnectEvent());
-        new Thread(chat::reconnect).start();
+        new Thread(chat::reconnect, "TwitchChat-ChatReconnect").start();
     }
 }
