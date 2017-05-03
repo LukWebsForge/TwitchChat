@@ -4,19 +4,20 @@ import de.lukweb.twitchchat.TwitchChat;
 import de.lukweb.twitchchat.events.irc.IrcQueueMessageEvent;
 import de.lukweb.twitchchat.events.irc.IrcSendMessageEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 public class TurboMessageDelayer implements MessageDelayer {
 
     private TwitchChat chat;
     private IrcClient irc;
-    private List<QueuedMessage> messages;
+    private LinkedList<QueuedMessage> queuedMessages;
+
+    // todo use queue
 
     public TurboMessageDelayer(TwitchChat chat, IrcClient irc) {
         this.chat = chat;
         this.irc = irc;
-        this.messages = new ArrayList<>();
+        this.queuedMessages = new LinkedList<>();
         new Thread(() -> {
             while (!irc.isClosed()) {
                 long startTime = System.currentTimeMillis();
@@ -24,13 +25,13 @@ public class TurboMessageDelayer implements MessageDelayer {
                 int limit = getRemainingLimit() / 20;
                 limit = limit < 1 ? 1 : limit;
 
-                if (!isLimitReached()) messages.stream()
-                        .filter(msg -> !msg.isSent())
-                        .sorted()
-                        .limit(limit)
-                        .forEachOrdered(this::send);
-
-                cleanUp();
+                if (!isLimitReached()) {
+                    for (int i = 0; i < limit; i++) {
+                        QueuedMessage poll = queuedMessages.poll();
+                        if (poll == null) break;
+                        send(poll);
+                    }
+                }
 
                 try {
                     Thread.sleep(50 - (System.currentTimeMillis() - startTime));
@@ -49,7 +50,7 @@ public class TurboMessageDelayer implements MessageDelayer {
         chat.getEventManager().callEvent(event);
         if (event.isCanceled()) return;
 
-        messages.add(queuedMessage);
+        queuedMessages.add(queuedMessage);
     }
 
     private void send(QueuedMessage message) {
@@ -70,7 +71,7 @@ public class TurboMessageDelayer implements MessageDelayer {
         boolean nonOperatorMsg = false;
         int messageCount = 0;
 
-        for (QueuedMessage message : messages) {
+        for (QueuedMessage message : queuedMessages) {
             if (!message.isSent()) continue;
             if ((message.getSentTimestamp() + 30) < (System.currentTimeMillis() / 1000)) continue;
             if (!message.isOperator()) nonOperatorMsg = true;
@@ -82,10 +83,5 @@ public class TurboMessageDelayer implements MessageDelayer {
         } else {
             return 200 - messageCount;
         }
-    }
-
-    private void cleanUp() {
-        int time = (int) (System.currentTimeMillis() / 1000);
-        messages.removeIf(msg -> msg.isSent() && (msg.getSentTimestamp() + 2 * 60) < time);
     }
 }
