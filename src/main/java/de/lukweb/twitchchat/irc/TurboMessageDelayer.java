@@ -12,29 +12,23 @@ public class TurboMessageDelayer implements MessageDelayer {
     private IrcClient irc;
     private LinkedList<QueuedMessage> queuedMessages;
 
-    // todo use queue
-
     public TurboMessageDelayer(TwitchChat chat, IrcClient irc) {
         this.chat = chat;
         this.irc = irc;
         this.queuedMessages = new LinkedList<>();
         new Thread(() -> {
             while (!irc.isClosed()) {
-                long startTime = System.currentTimeMillis();
 
-                int limit = getRemainingLimit() / 20;
-                limit = limit < 1 ? 1 : limit;
-
-                if (!isLimitReached()) {
-                    for (int i = 0; i < limit; i++) {
-                        QueuedMessage poll = queuedMessages.poll();
-                        if (poll == null) break;
-                        send(poll);
-                    }
-                }
+                QueuedMessage poll = queuedMessages.poll();
+                if (poll != null) send(poll);
 
                 try {
-                    Thread.sleep(50 - (System.currentTimeMillis() - startTime));
+                    QueuedMessage peek = queuedMessages.peek();
+                    if (peek != null && peek.isOperator()) {
+                        Thread.sleep(300);
+                    } else {
+                        Thread.sleep(1500);
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -54,7 +48,6 @@ public class TurboMessageDelayer implements MessageDelayer {
     }
 
     private void send(QueuedMessage message) {
-
         IrcSendMessageEvent event = new IrcSendMessageEvent(message);
         chat.getEventManager().callEvent(event);
         if (event.isCanceled()) return;
