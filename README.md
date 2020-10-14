@@ -3,6 +3,8 @@ A simple IRC client for Twitch
 
 :tada: **The second release candidate is out!** Happy testing!
 
+:warning: This project hasn't been updated for four years. Maybe it does still work, but I can't guarantee anything. 
+
 [![Build Status](https://travis-ci.org/LukWebsForge/TwitchChat.svg?branch=master)](https://travis-ci.org/LukWebsForge/TwitchChat)
 [![JitPack](https://jitpack.io/v/LukWebsForge/TwitchChat.svg)](https://jitpack.io/#LukWebsForge/TwitchChat)
 

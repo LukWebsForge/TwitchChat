@@ -6,7 +6,7 @@
 
     <groupId>de.lukweb</groupId>
     <artifactId>twitchchat</artifactId>
-    <version>1.05-SNAPSHOT</version>
+    <version>1.06-SNAPSHOT</version>
 
     <name>TwitchChat</name>
     <description>A simple IRC client for Twitch</description>
@@ -32,10 +32,6 @@
         <developerConnection>scm:git:git@github.com:LukWebsForge/TwitchChat.git</developerConnection>
     </scm>
 
-    <prerequisites>
-        <maven>3.0.4</maven>
-    </prerequisites>
-
     <developers>
         <developer>
             <name>LukBukkit</name>
@@ -51,15 +47,20 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20160810</version>
+            <version>20200518</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
     <profiles>
         <!-- Profile for JitPack -->
@@ -71,7 +72,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -86,7 +87,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.3</version>
+                        <version>3.20.0</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -120,7 +121,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -135,7 +136,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.3</version>
+                        <version>3.20.0</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -146,11 +147,11 @@
                         </executions>
                     </plugin>
 
-                    <!-- Used for siging the output -->
+                    <!-- Used for signing the output -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -162,16 +163,16 @@
                         </executions>
                     </plugin>
 
-                    <!-- Used for promting the build to the central repository -->
+                    <!-- Used for promoting the build to the central repository -->
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
+                        <version>1.6.8</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <!-- Relase with "mvn nexus-staging:release" -->
+                            <!-- Release with "mvn nexus-staging:release" -->
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
@@ -187,7 +188,7 @@
                     <!-- Used for bundle additional dependencies into the jar -->
                     <plugin>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>2.6</version>
+                        <version>3.3.0</version>
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
                             <finalName>${project.artifactId}</finalName>
@@ -199,7 +200,7 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <id>assamble</id>
+                                <id>assemble</id>
                                 <goals>
                                     <goal>single</goal>
                                 </goals>
@@ -214,10 +215,10 @@
 
     <build>
         <plugins>
-            <!-- Used for settings the lanaguage level to Java 8 -->
+            <!-- Used for settings the language level to Java 8 -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
