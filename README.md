@@ -1,35 +1,27 @@
 # TwitchChat
 A simple IRC client for Twitch
 
-:tada: **The second release candidate is out!** Happy testing!
-
-:warning: This project hasn't been updated for four years. Maybe it does still work, but I can't guarantee anything. 
-
-[![Build Status](https://travis-ci.org/LukWebsForge/TwitchChat.svg?branch=master)](https://travis-ci.org/LukWebsForge/TwitchChat)
-[![JitPack](https://jitpack.io/v/LukWebsForge/TwitchChat.svg)](https://jitpack.io/#LukWebsForge/TwitchChat)
-
+:warning: This project hasn't been updated for six or more years. Maybe it does still work, but I can't guarantee anything.
 
 ## Getting Started
 
 ### Download
 
 I recommend you to use a maven project for your application. 
-You can use [JitPack](https://jitpack.io/#LukWebsForge/TwitchChat) to embed this library. 
-It will also relased on maven central when there's a stable version,
-currently you can use snapshot builds:
+You can access this library via [JitPack](https://jitpack.io/#LukWebsForge/TwitchChat):
 ```xml
 <repositories>
     <repository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
     </repository>
 </repositories>
 
 <dependencies>
     <dependency>
-        <groupId>de.lukweb</groupId>
-        <artifactId>twitchchat</artifactId>
-        <version>1.03-SNAPSHOT</version>
+        <groupId>com.github.LukWebsForge</groupId>
+        <artifactId>TwitchChat</artifactId>
+        <version>v1.0.rc3</version>
     </dependency>
 </dependencies>
 ```
@@ -60,7 +52,7 @@ Thread.sleep(Integer.MAX_VALUE);
 
 ## Contribution
 
-If you want to contribute you can find helpful information 
-[here](https://github.com/justintv/Twitch-API/blob/master/IRC.md).
+If you want to contribute you can find helpful information at 
+[Twitch's developer documentation](https://dev.twitch.tv/docs/irc/).
 
 Your ideas and bugs are welcome.
