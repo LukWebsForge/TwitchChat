@@ -7,8 +7,8 @@ A simple IRC client for Twitch
 
 ### Download
 
-I recommend you to use a maven project for your application. 
-You can access this library via [JitPack](https://jitpack.io/#LukWebsForge/TwitchChat):
+I recommend you to use a Maven project for your application. 
+You can access this library via [JitPack](https://jitpack.io/#LukWebsForge/TwitchChat).
 ```xml
 <repositories>
     <repository>
@@ -21,7 +21,7 @@ You can access this library via [JitPack](https://jitpack.io/#LukWebsForge/Twitc
     <dependency>
         <groupId>com.github.LukWebsForge</groupId>
         <artifactId>TwitchChat</artifactId>
-        <version>v1.0.rc3</version>
+        <version>1.0.0</version>
     </dependency>
 </dependencies>
 ```
